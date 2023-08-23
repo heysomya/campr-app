@@ -2,9 +2,20 @@ const mongoose = require('mongoose');
 const Review = require('./review');
 const { Schema } = mongoose;
 
+const { cloudinary } = require('../cloudinary');
+
+const ImageSchema = new Schema({
+  url: String,
+  filename: String,
+});
+
+ImageSchema.virtual('thumbnail').get(function () {
+  return this.url.replace('/upload', '/upload/w_200');
+});
+
 const CampgroundSchema = new Schema({
   title: String,
-  image: String,
+  images: [ImageSchema],
   price: Number,
   description: String,
   location: String,
@@ -20,13 +31,18 @@ const CampgroundSchema = new Schema({
   ],
 });
 
-CampgroundSchema.post('findOneAndDelete', async function (doc) {
-  if (doc) {
+CampgroundSchema.post('findOneAndDelete', async function (campground) {
+  if (campground.reviews) {
     await Review.deleteMany({
       _id: {
-        $in: doc.reviews,
+        $in: campground.reviews,
       },
     });
+  }
+  if (campground.images) {
+    for (const img of campground.images) {
+      await cloudinary.uploader.destroy(img.filename);
+    }
   }
 });
 
