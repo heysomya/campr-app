@@ -19,22 +19,28 @@ const sample = (array) => {
 const seedDB = async () => {
   await Campground.deleteMany({});
   await Review.deleteMany({});
-  for (let i = 0; i < 30; i++) {
+  for (let i = 0; i < 400; i++) {
     const random1000 = Math.floor(Math.random() * 1000) + 1;
     const randomNum = Math.floor(Math.random() * 30) + 10;
     const camp = new Campground({
       author: '64e0719499719a97db46d1af',
       title: `${sample(descriptors)} ${sample(places)}`,
       location: `${cities[random1000].city}, ${cities[random1000].state}`,
-      geometry: { type: 'Point', coordinates: [ -111.940009, 33.425506 ] },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          cities[random1000].longitude,
+          cities[random1000].latitude,
+        ],
+      },
       images: [
         {
-          url: 'https://res.cloudinary.com/douxf2mme/image/upload/v1692694723/Campr/fjsoyiab3tw0xgaql8ui.jpg',
-          filename: 'Campr/zkkbcjzv5ybftz5umfrx',
+          url: 'https://res.cloudinary.com/douxf2mme/image/upload/v1692693323/Campr/i0ezlhxda2whptjnqoic.jpg',
+          filename: 'Campr/i0ezlhxda2whptjnqoic',
         },
         {
-          url: 'https://res.cloudinary.com/douxf2mme/image/upload/v1692695263/Campr/kyogrsicv1nvlxmd3pyt.jpg',
-          filename: 'Campr/izfnx7q2uxykaxlto9ag',
+          url: 'https://res.cloudinary.com/douxf2mme/image/upload/v1692881548/Campr/gdtvi6hg0mahepbgthc9.jpg',
+          filename: 'Campr/gdtvi6hg0mahepbgthc9.jpg',
         },
       ],
       description:
